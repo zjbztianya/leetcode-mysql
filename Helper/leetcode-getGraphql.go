@@ -16,6 +16,7 @@ type JsL4CodeSnippets []struct {
 type JsL3Detail struct {
 	Content      string
 	CodeSnippets JsL4CodeSnippets
+	MysqlSchemas []string
 }
 
 type JsL2Question struct {
@@ -26,12 +27,12 @@ type JsL1Data struct {
 	Data JsL2Question
 }
 
-func getGraphql(p problem) (string, string) {
+func getGraphql(p problem) (string, string, []string) {
 	// req := newReq()
 
 	params := make(map[string]interface{})
 	params["operationName"] = "questionData"
-	params["query"] = "query questionData($titleSlug: String!) { question(titleSlug: $titleSlug) { content codeSnippets { lang code } } }"
+	params["query"] = "query questionData($titleSlug: String!) { question(titleSlug: $titleSlug) { content codeSnippets { lang code } mysqlSchemas } }"
 	titleSlug := make(map[string]string)
 	titleSlug["titleSlug"] = p.TitleSlug
 	params["variables"] = titleSlug
@@ -71,5 +72,5 @@ func getGraphql(p problem) (string, string) {
 			code = qc.Code
 		}
 	}
-	return res.Data.Question.Content, code
+	return res.Data.Question.Content, code, res.Data.Question.MysqlSchemas
 }

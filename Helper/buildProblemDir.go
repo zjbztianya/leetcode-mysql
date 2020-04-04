@@ -84,7 +84,7 @@ func build(p problem) {
 
 	log.Printf("开始创建 %d %s 的文件夹...\n", p.ID, p.Title)
 
-	content, fc := getGraphql(p)
+	content, fc, mysqlSchemas := getGraphql(p)
 	if fc == "" {
 		log.Panicf("查无mysql写法")
 	}
@@ -102,7 +102,7 @@ func build(p problem) {
 
 	//fcName, para, ans, _ := parseFunction(fc)
 
-	creatSql(p)
+	creatSql(p, mysqlSchemas)
 
 	//creatGoTest(p, fcName, para, ans)
 
@@ -118,9 +118,13 @@ var typeMap = map[string]string{
 	"bool":    "false",
 }
 
-func creatSql(p problem) {
+func creatSql(p problem, mysqlSchemas []string) {
 	filename := fmt.Sprintf("%s/%s.sql", p.Dir(), p.TitleSlug)
-	write(filename, "")
+	var builder strings.Builder
+	for _, schemas := range mysqlSchemas {
+		builder.WriteString(schemas + ";\n")
+	}
+	write(filename, builder.String())
 
 	//vscodeOpen(filename)
 }
