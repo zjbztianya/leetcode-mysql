@@ -129,7 +129,7 @@
 
 ## helper
 
-[gen_kit](./Helper) 会处理大部分琐碎的工作。
+[Helper](./Helper) 会处理大部分琐碎的工作。
 
 
 ## 致谢
